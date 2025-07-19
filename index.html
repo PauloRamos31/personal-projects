@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login ou Registro</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Inter font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5; /* Light gray background */
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+    <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
+        <h2 id="form-title" class="text-3xl font-bold text-center text-gray-800 mb-6">Login</h2>
+
+        <!-- Formulário de Login -->
+        <form id="login-form" class="space-y-5">
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <input type="email" id="email" name="email" placeholder="seu@email.com"
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                       required>
+            </div>
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Senha</label>
+                <input type="password" id="password" name="password" placeholder="********"
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                       required>
+            </div>
+
+            <button type="submit"
+                    class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200 text-lg font-semibold">
+                Entrar
+            </button>
+        </form>
+
+        <!-- Formulário de Registro (inicialmente oculto) -->
+        <form id="register-form" class="space-y-5 hidden">
+            <div>
+                <label for="reg-name" class="block text-sm font-medium text-gray-700 mb-1">Nome Completo</label>
+                <input type="text" id="reg-name" name="reg-name" placeholder="Seu nome completo"
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition duration-200"
+                       required>
+            </div>
+            <div>
+                <label for="reg-email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <input type="email" id="reg-email" name="reg-email" placeholder="seu@email.com"
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition duration-200"
+                       required>
+            </div>
+            <div>
+                <label for="reg-password" class="block text-sm font-medium text-gray-700 mb-1">Senha</label>
+                <input type="password" id="reg-password" name="reg-password" placeholder="********"
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition duration-200"
+                       required>
+            </div>
+            <div>
+                <label for="confirm-password" class="block text-sm font-medium text-gray-700 mb-1">Confirmar Senha</label>
+                <input type="password" id="confirm-password" name="confirm-password" placeholder="********"
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition duration-200"
+                       required>
+            </div>
+
+            <button type="submit"
+                    class="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-200 text-lg font-semibold">
+                Cadastrar
+            </button>
+        </form>
+
+        <!-- Formulário de Esqueceu Senha (inicialmente oculto) -->
+        <form id="forgot-password-form" class="space-y-5 hidden">
+            <div>
+                <label for="forgot-email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <input type="email" id="forgot-email" name="forgot-email" placeholder="seu@email.com"
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200"
+                       required>
+            </div>
+
+            <button type="submit"
+                    class="w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition duration-200 text-lg font-semibold">
+                Redefinir Senha
+            </button>
+        </form>
+
+        <!-- Opções de Ação -->
+        <div class="mt-6 text-center text-sm">
+            <p id="toggle-link-container">
+                Não tem uma conta? <a href="#" id="toggle-register" class="text-blue-600 hover:underline font-medium">Registre-se</a>
+            </p>
+            <p class="mt-2">
+                <a href="#" id="forgot-password" class="text-blue-600 hover:underline font-medium">Esqueceu minha senha?</a>
+            </p>
+            <p class="mt-2 hidden" id="back-to-login-container">
+                <a href="#" id="back-to-login" class="text-blue-600 hover:underline font-medium">Voltar para o Login</a>
+            </p>
+        </div>
+
+        <!-- Mensagem de Status (para feedback ao usuário) -->
+        <div id="status-message-login" class="mt-4 p-3 rounded-lg text-center hidden" role="alert"></div>
+    </div>
+
+    <script>
+        // Referências aos elementos da página
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+        const forgotPasswordForm = document.getElementById('forgot-password-form');
+        const toggleRegisterLink = document.getElementById('toggle-register');
+        const formTitle = document.getElementById('form-title');
+        const toggleLinkContainer = document.getElementById('toggle-link-container');
+        const forgotPasswordLink = document.getElementById('forgot-password');
+        const backToLoginLinkContainer = document.getElementById('back-to-login-container');
+        const backToLoginLink = document.getElementById('back-to-login');
+        const statusMessageLogin = document.getElementById('status-message-login'); // Mensagem de status específica para esta página
+
+        // Variável para controlar qual elemento de mensagem de status está ativo
+        let currentStatusMessageElement = statusMessageLogin;
+
+        // Função para exibir mensagens de status
+        function showStatusMessage(message, type = 'info') {
+            currentStatusMessageElement.textContent = message;
+            currentStatusMessageElement.classList.remove('hidden', 'bg-red-100', 'text-red-700', 'bg-green-100', 'text-green-700', 'bg-blue-100', 'text-blue-700');
+            if (type === 'error') {
+                currentStatusMessageElement.classList.add('bg-red-100', 'text-red-700');
+            } else if (type === 'success') {
+                currentStatusMessageElement.classList.add('bg-green-100', 'text-green-700');
+            } else {
+                currentStatusMessageElement.classList.add('bg-blue-100', 'text-blue-700');
+            }
+            currentStatusMessageElement.classList.remove('hidden');
+        }
+
+        // Função para limpar mensagens de status
+        function clearStatusMessage() {
+            if (currentStatusMessageElement) {
+                currentStatusMessageElement.classList.add('hidden');
+                currentStatusMessageElement.textContent = '';
+            }
+        }
+
+        // Função para mostrar uma seção específica do formulário e esconder as outras
+        function showFormSection(formToShow, title) {
+            loginForm.classList.add('hidden');
+            registerForm.classList.add('hidden');
+            forgotPasswordForm.classList.add('hidden');
+
+            formToShow.classList.remove('hidden');
+            formTitle.textContent = title;
+            clearStatusMessage(); // Limpa a mensagem de status ao trocar de formulário
+
+            // Ajusta os links de ação e visibilidade com base no formulário ativo
+            if (formToShow === loginForm) {
+                toggleLinkContainer.innerHTML = 'Não tem uma conta? <a href="#" id="toggle-register" class="text-blue-600 hover:underline font-medium">Registre-se</a>';
+                forgotPasswordLink.classList.remove('hidden');
+                backToLoginLinkContainer.classList.add('hidden');
+            } else if (formToShow === registerForm) {
+                toggleLinkContainer.innerHTML = 'Já tem uma conta? <a href="#" id="toggle-register" class="text-blue-600 hover:underline font-medium">Entrar</a>';
+                forgotPasswordLink.classList.add('hidden');
+                backToLoginLinkContainer.classList.add('hidden');
+            } else if (formToShow === forgotPasswordForm) {
+                toggleLinkContainer.innerHTML = ''; // Não mostra o link de registro/login no esqueceu senha
+                forgotPasswordLink.classList.add('hidden');
+                backToLoginLinkContainer.classList.remove('hidden');
+            }
+
+            // Re-obter o elemento toggleRegisterLink após a atualização do innerHTML para garantir que o listener funcione
+            const newToggleRegisterLink = document.getElementById('toggle-register');
+            if (newToggleRegisterLink) {
+                newToggleRegisterLink.removeEventListener('click', toggleFormHandler); // Remove o listener antigo
+                newToggleRegisterLink.addEventListener('click', toggleFormHandler); // Adiciona o novo listener
+            }
+        }
+
+        // Handler para alternar entre Login e Registro
+        function toggleFormHandler(e) {
+            e.preventDefault();
+            if (loginForm.classList.contains('hidden')) { // Se o formulário de login está oculto, estamos no registro ou esqueceu senha
+                showFormSection(loginForm, 'Login');
+            } else { // Se o formulário de login está visível, vamos para o registro
+                showFormSection(registerForm, 'Registrar');
+            }
+        }
+
+        // Event listener para o link "Registre-se"
+        toggleRegisterLink.addEventListener('click', toggleFormHandler);
+
+        // Event listener para o link "Esqueceu minha senha?"
+        forgotPasswordLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            showFormSection(forgotPasswordForm, 'Redefinir Senha');
+        });
+
+        // Event listener para o link "Voltar para o Login" (no formulário de esqueceu senha)
+        backToLoginLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            showFormSection(loginForm, 'Login');
+        });
+
+        // Lidar com o envio do formulário de Login
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            clearStatusMessage();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // Simulação de autenticação
+            if (email === 'teste@email.com' && password === 'senha123') {
+                showStatusMessage('Login realizado com sucesso! Redirecionando...', 'success');
+                // Em um app real, aqui você redirecionaria para o dashboard ou página principal
+                // window.location.href = 'dashboard.html'; // Exemplo de redirecionamento
+            } else {
+                showStatusMessage('Email ou senha incorretos.', 'error');
+            }
+        });
+
+        // Lidar com o envio do formulário de Registro
+        registerForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            clearStatusMessage();
+            const name = document.getElementById('reg-name').value;
+            const regEmail = document.getElementById('reg-email').value;
+            const regPassword = document.getElementById('reg-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            if (regPassword !== confirmPassword) {
+                showStatusMessage('As senhas não coincidem.', 'error');
+                return;
+            }
+
+            // Simulação de registro
+            if (name && regEmail && regPassword) {
+                showStatusMessage('Cadastro realizado com sucesso! Agora você pode fazer login.', 'success');
+                showFormSection(loginForm, 'Login'); // Volta para a tela de login após o registro
+            } else {
+                showStatusMessage('Por favor, preencha todos os campos.', 'error');
+            }
+        });
+
+        // Lidar com o envio do formulário de Esqueceu Senha
+        forgotPasswordForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            clearStatusMessage();
+            const forgotEmail = document.getElementById('forgot-email').value;
+
+            if (forgotEmail) {
+                showStatusMessage(`Um link de redefinição de senha foi enviado para ${forgotEmail} (simulação).`, 'info');
+            } else {
+                showStatusMessage('Por favor, insira seu email.', 'error');
+            }
+        });
+    </script>
+</body>
+</html>
